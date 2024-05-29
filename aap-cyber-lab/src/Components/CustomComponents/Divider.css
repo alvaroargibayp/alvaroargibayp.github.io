@@ -1,0 +1,8 @@
+.divider {
+    border-top: 2px solid #F7B05B;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
