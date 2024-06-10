@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width,initial-scale=1" name="viewport">
+  <meta content="description" name="description">
+  <meta name="google" content="notranslate" />
+  <meta content="Mashup templates have been developped by Orson.io team" name="author">
+
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-icon-180x180.png">
+  <link href="./assets/favicon.ico" rel="icon">
+
+  <title>Nmap</title>  
+
+<link href="./main.3f6952e4.css" rel="stylesheet"></head>
+
+<body class="">
+<div id="site-border-left"></div>
+<div id="site-border-right"></div>
+<div id="site-border-top"></div>
+<div id="site-border-bottom"></div>
+<!-- Add your content of header -->
+<header>
+  <nav class="navbar  navbar-fixed-top navbar-default">
+    <div class="container">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+        <ul class="nav navbar-nav ">
+            <li><a href="./index.html" title="">Home</a></li>
+            <li><a href="./notes.html" title="">Notes</a></li>
+            <li><a href="./projects.html" title="">Projects</a></li>
+            <li><a href="./contact.html" title="">Contact</a></li>
+        </ul>
+
+
+          <ul class="nav navbar-nav navbar-right navbar-small visible-md visible-lg">
+            <li><a href="./index.html" title="" class="active">001</a></li>
+            <li><a href="./index.html" title="">002</a></li>
+            <li><a href="./index.html" title="">003</a></li>
+            <li><a href="./index.html" title="">004</a></li>
+            <li><a href="./index.html" title="">005</a></li>
+            <li><a href="./index.html" title="">006</a></li>
+          </ul>
+
+
+      </div> 
+    </div>
+  </nav>
+</header>
+<div class="section-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <img src="./assets/images/notes/note1/note1.png" class="img-responsive" alt="">
+        <div class="card-container">
+          <div class="text-center">
+            <h1 class="h2">001 : Nmap</h1>
+          </div>
+          <p>Nmap is a powerful open-source network scanning tool used for network discovery and security auditing. It helps identify devices, services, and potential vulnerabilities within a network.</p>
+        </div>
+      </div>
+
+      <h3>Introduction</h3>
+
+      <p>When tasked with performing a security audit on an IP address (or multiple addresses), the initial step is to gather as much information about the target as possible. This process is known as enumeration and it involves identifying the services running on the target system. This is critical because knowing which services are available can provide a pathway for potential exploitation.</p>
+      <p>A computer uses ports to manage multiple network connection simultaneously. Here's a brief overview of how ports work:</p>
+      <p>- Ports are numerical identifiers in the range 0-65535.</p>
+      <p>- Well-known ports are some that are standardized for specific services. They range from 0 to 1023. For example HTTP can be found at port 80, HTTPS at port 443, FTP at port 21, SSH at port 22 and SMB at port 445.</p>
+      <p>- Ports ranging from 49152-65535 are often used for client-side connections.</p>
+      <p>When a service is running on a server, it listens on a specific port for incoming connections. For instance, a web server will typically listen on port 80 for HTTP traffic and port 443 for HTTPS trafic.</p>
+      <p>If we don't know which ports a server has open, we can't successfully attack the target. Thus, it's crucial to start with a port scan, usually using a tool called <strong>Nmap</strong>. Nmap connects to each port of the target in turn and determines if the port is open, closed, or filtered. Once open ports are identified, we can then enumerate which services are running on each port, often using Nmap itself.</p>
+      <p>Nmap is the industry standard for port scanning due to its unmatched functionality and powerful scripting engine, which can scan for vulnerabilities and sometimes perform exploits directly. It's essential what port scanning is, why it's necessary, and that Nmap is the preferred tool for initial enumeration.</p>
+
+      <h3>Nmap Switches</h3>
+
+      <p>Nmap, like most penetration testing tools, is run from the terminal and its avaliable for both Windows and Linux.</p>
+      <p>Nmap can be accessed by typing <strong>nmap</strong> into the terminal command line, followed by some of the "switches" (command arguments which tell a program to do different things) we will be covering below.</p>
+      <p>For help, you can use the help menu (<strong>nmap -h</strong>) or the Nmap man page (<strong>man nmap</strong>).</p>
+
+      <h2>Scan Types</h2>
+
+      <h3>Overview</h3>
+
+      <p>When port scanning with Nmap, there are three basic scan types. These are:</p>
+      <p>- TCP Connect Scans (<strong>-sT</strong>)</p>
+      <p>- SYN "Half-open" Scans (<strong>-sS</strong>)</p>
+      <p>- UDP Scans (<strong>-sU</strong>)</p>
+      <p>Additionally these are several less common port scan types, some of which will also cover (albeit in less detail). These are:</p>
+      <p>- TCP Null Scans (<strong>-sN</strong>)</p>
+      <p>- TCP FIN Scans (<strong>-sF</strong>)</p>
+      <p>- TCP XMAS Scans (<strong>-sX</strong>)</p>
+      <p>Most of these (with the exception of UDP scans) are used for very similar purposes, however, the way that they work differs between each scan. This means that, whilst one of the first three scans are likely to be yor go-to in most situations, it's worth bearing in mind that other scan types exist.</p>
+      <p>In terms of network scanning, we will also look briefly at ICMP (or "ping") scanning.</p>
+
+      <h3>TCP Connect Scans</h3>
+
+      <p>To understand TCP Connect Scans (<strong>-sT</strong>), it's important to understand the TCP three-way handshake.</p>
+      <p>It consists of three stages. First, the connecting terminal (our attacking machine) sends a TCP request to the target server with the SYN flag set. The server then acknowledges this packet with a TCP response containing the SYN flag, as well as the ACK flag. Finally, our terminal completes the handshake by sending a TCP request with the ACK flag set.</p>
+      <div class="col-xs-12" style="display: flex; justify-content: center;">
+        <img src="./assets/images/notes/note1/three-way-handshake.png" class="img-responsive" alt="three-way-handshake">
+      </div>
+      <p>This is one of the fundamental principles of TCP/IP networking, but how does it relate to Nmap?</p>
+      <p>Because, as the name suggests, a TCP Connect scan works by performing the three-way handshake with each target port in turn. In other words, Nmap tries to connect to each specified TCP port, and determines wether the service is open by the response it receives.</p>
+      <p>If Nmap sends a TCP request with a SYN flag to a closed port, the target server will respond with a TCP packet with the RST (Reset) flag set. By this response, Nmap can establish that the port is closed.</p>
+      <div class="col-xs-12" style="display: flex; justify-content: center;">
+        <img src="./assets/images/notes/note1/three-way-handshake-rst.png" class="img-responsive" alt="three-way-handshake">
+      </div>
+      <p>If, however, the request is sent to an open port, the target will respond with a TCP packet with the SYN/ACK flags set. Nmap then marks this port as being open (and completes the handshake by sending back a TCP packet with ACK set).</p>
+      
+      <h3>SYN Scans</h3>
+
+      <p>As with TCP scans, SYN scans (<strong>-sS</strong>) are used to scan the TCP port-range of a target or targets; however, the two scan types work slightly differently. SYN scans are sometimes referred to as "Half-open" scans, or "Stealth" scans.</p>
+      <p>Where TCP scans perform a full three-way handshake with the target, SYN scans sends back a RST TCP packet after receiving a SYN/ACK from the server (this prevents the server from repeatedly trying to make the request). In other words, the sequence for scanning an open port looks like this:</p>
+      <div class="col-xs-12" style="display: flex; justify-content: center;">
+        <img src="./assets/images/notes/note1/three-way-handshake-syn.png" class="img-responsive" alt="three-way-handshake">
+      </div>
+      <p>This has a variety of advantages for us:</p>
+      <p>- It can be used to bypass older Intrusion Detection systems as they are looking out for a full three way handshake. This is often no longer the case with modern IDS solutions; it is for this reason that SYN scans are still frequently referred to as "stealth" scans.</p>
+      <p>- SYN scans are often not logged by applications listening on open ports, as standard practice is to log a connection once it's been fully established. Again, this plays into the idea of SYN scans being stealthy.</p>
+      <p>Without having to bother about completing (and disconnecting from) a three-way handshake for every port, SYN scans are significantly faster than standard TCP Connect scan.</p>
+      <p>There are, however, a couple of disadvantages to SYN scans, namely:</p>
+      <p>They require sudo permissions in order to work correctly in Linux. THis is because SYN scans require the ability to create raw packets (as opposed to the full TCP handshake), which is a privilege only the root user has by default.</p>
+      <p>Unstable services are sometimes brought down by SYN scans, which could prove problematic if a client has provided a production environment for the test.</p>
+      <p>All in all, the pros outweigh the cons. For this reason, SYN scans are the default scans used by Nmap if run with sudo permissions.</p>
+      <p>When using a SYN scan to identify closed and filtered ports, the exact same rules as with a TCP Connect scan apply.</p>
+      <p>If a port is closed then the server responds with a RST TCP packet. If the port is filtered by a firewall then the TCP SYN packet is either dropped, or spoofed with a TCP reset.</p>
+      <p>In this regard, the two scans are identical: the big differences is in how they handle open ports.</p>
+
+      <h3>UDP Scans</h3>
+
+      <p>Unlike UDP connections are stateless. This means that, rather than inititating a connection with a back-and-forth "handshake", UDCP connections rely on sending packets to a target port and essentially hoping that they make it. This makes UDP superb for connections which rely on speed over quality (e.g. video sharing), but the lack of acknowledgment makes UDP significantly more difficult (and much slower) to scan. The switch for an Nmap UDP scan is (<strong>-sU</strong>)</p>
+      <p>When a packet is sent to an open UDP port, there should be no response. When this happens, Nmap refers to the port as being <strong>open|filtered</strong>. In other words, it suspects that the port is open, but it could be firewalled. If it gets a UDP response (which is very unusual), then the port is marked as open. More commonly there is no response, in which case the request is sent a second time as a double-check. If there is still no response then the port is marked open|filtered and Nmap moves on.</p>
+      <p>When a packet is sent to a closed UDP port, the target should respond with an ICMP (ping) packet containing a message that the port is unreachable. This clearly identifies closed ports, which Nmap marks as such and moves on.</p>
+      <p>When scanning UDP ports, Nmap usually sends completely empty requests -- just raw UDP packets. That said, for ports which are usually occupied by well-known services, it will instead send a protocol-specific payload which is more likely to elicit a response from which a more accurate result can be drawn.</p>
+
+      <h3>NULL, FIN and Xmas</h3>
+
+      <p>NULL, FIN and Xmas TCP port scans are less commonly used than any of the others we've covered already, so we will not go into a huge amount of depth here. All three are interlinked and are used primarily as they tend to be even stealthier, relatively speaking, than a SYN "stealth" scan. Beginning with NULL scans:</p>
+      <p>- As the name suggests, NULL scans (<strong>-sN</strong>) are when the TCP request is sent with no flags set at all. As per the RFC, the target host should respond with a RST if the port is closed.</p>
+      <p>- FIN scans (<strong>-sF</strong>) work in an almost identical fashion; however, instead of sending a completely empty packet, a request is sent with the FIN flag (usually used to gracefully close an active connection). Once again, Nmap expects a RST if the port is closed.</p>
+      <p>- As with the other two scans in this class, Xmas scans (<strong>-sX</strong>) send a malformed TCP packet and expects a RST response for closed ports. It's referred to as an xmas scan as the flags that it sets (PSH, URG and FIN) give it the appearance of a blinking christmas tree when viewed as a packet capture in Wireshark.</p>
+      <p>The expected response for open ports with these scans is also identical, and is very similar to that of a UDP scan. If the port is open then there is no response to the malformed packet. Unfortunately (as with open UDP ports), that is also an expected behaviour if the port is protected by a firewall, so NULL, FIN and Xmas scans will only ever identify ports as being open|filtered, closed, or filtered. If a port is identified as filtered with one of these scans then it is usually because the target has responded with an ICMP unreachable packet.</p>
+      <p>That said, the goal here is, of course, firewall evasion. Many firewalls are configured to drop incoming TCP packets to blocked ports which have the SYN flag set (thus blocking new connection initiation requests). By sending requests which do not contain the SYN flag, we effectively bypass this kind of firewall. Whilst this is good in theory, most modern IDS solutions are savvy to these scan types, so don't rely on them to be 100% effective when dealing with modern systems.</p>
+
+      <h3>ICMP Network Scanning</h3>
+
+      <p>On first connection to a target network in a black box assignment, our first objective is to obtain a "map" of the network structure -- or, in other words, we want to see which IP addresses contain active hosts, and which do not.</p>
+      <p>One way to do this is by using Nmap to perform a so called "ping sweep". This is exactly as the name suggests: Nmap sends an ICMP packet to each possible IP address for the specified network. When it receives a response, it marks the IP address that responded as being alive. For reasons we'll see in a later task, this is not always accurate; however, it can provide something of a baseline and thus is worth covering.</p>
+      <p>To perform a ping sweep, we use the <strong>-sn</strong> switch in conjunction with IP ranges which can be specified with either a hypen (<strong>-</strong>) or CIDR notation. i.e. we could scan the <strong>192.168.0.x</strong> network using:</p>
+      <p>· <strong>nmap -sn 192.168.0.1-254</strong></p>
+      <p>or</p>
+      <p>· <strong>nmap -sn 192.168.0.0/24</strong></p>
+      <p>The <strong>-sn</strong> switch tells Nmap not to scan any ports -- forcing it to rely primarily on ICMP echo packets (or ARP requests on a local network, if run with sudo or directly as the root user) to identify targets. In addition to the ICMP echo requests, the <strong>-sn</strong> switch will also cause nmap to send a TCP SYN packet to port 443 of the target, as well as a TCP ACK (or TCP SYN if not run as root) packet to port 80 of the target.</p>
+
+      <h2>NSE Scripts</h2>
+
+      <h3>Overview</h3>
+
+      <p>The <strong>N</strong>map <strong>S</strong>cripting <strong>E</strong>ngine (NSE) is an incredibly powerful addition to Nmap, extending its functionality quite considerably. NSE Scripts are written in the Lua programming language, and can be used to do a variety of things: from scanning for vulnerabilities, to automating exploits for them. The NSE is particularly useful for reconnaisance, however, it is well worth bearing in mind how extensive the script library is.</p>
+      <p>There are many categories available. Some useful categories include:</p>
+      <p>- <strong>safe</strong>: Won't affect the target</p>
+      <p>- <strong>intrusive</strong>: Not safe, likely to affect the target</p>
+      <p>- <strong>vuln</strong>: Scan for vulnerabilities</p>
+      <p>- <strong>exploit</strong>: Attempt to exploit a vulnerability</p>
+      <p>- <strong>auth</strong>: Attempot to bypass authentication for running services</p>
+      <p>- <strong>brute</strong>: Attempt to bruteforce credentials for running services</p>
+      <p>- <strong>discovery</strong>: Attempt to query running services for further information about the network</p>
+      <p>A more exhaustive list can be found <a href="https://nmap.org/book/nse-usage.html">here</a></p>
+
+      <h3>Working with the NSE</h3>
+
+      <p>To run a specific script, we would use <strong>--script=&lt;script-name&gt;</strong>.</p>
+      <p>Multiple scripts can be run simultaneously in this fashion by separating them by a comma. For example: <strong>--script=smb-enum-users,smb-enum-shares</strong>.</p>
+      <p>Some scripts require arguments (for example, credentials, if they're exploiting an authenticated vulnerability). These can be given with the <strong>--script-args</strong> Nmap switch.</p>
+      <p>the arguments are separated by commas, and connected to the corresponding script with periods (i.e. <strong>&lt;script-name&gt;.&lt;argument&gt;</strong>).</p>
+
+      <h3>Fiewwall Evasion</h3>
+
+      <p>We have already seen some techniques for bypassing firewalls (think stealth scans, along with NULL, FIN and Xmas scans); however, there is another very common firewall configuration which it's imperative we know how to bypass.</p>
+      <p>Your typical Windows host will, with its default firewall, block all ICMP packets. This presents a problem: not only do we often use ping to manually establish the activity of a target, Nmap does the same thing by default. This means that Nmap will register a host with this firewall configuration as dead and not bother scanning it at all.</p>
+      <p>So, we need a way to get around this configuration. Fortunately Nmap provides an option for this: <strong>-Pn</strong>, which tells Nmap to not bother pinging the host before scanning it. This means that Nmap will always treat the target host(s) as being alive, effectively bypassing the ICMP block; however, it comes at the price of potentially taking a very long time to complete the scan (if the host really is dead then Nmap will still be checking and double checking every specified port).</p>
+      <p>There are a variety of other switches which Nmap considers useful for firewall evasion. We will not go through these in detail, however, they can be found <a href="https://nmap.org/book/man-bypass-firewalls-ids.html">here</a>.</p>
+
+    </div>
+  </div>
+</div>
+
+
+<footer class="footer-container text-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <p>© AAP CyberLab | Website created with <a href="http://www.mashup-template.com/" title="Create website with free html template">Mashup Template</a>/<a href="https://www.unsplash.com/" title="Beautiful Free Images">Unsplash</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function (event) {
+     navActivePage();
+  });
+</script>
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID 
+
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date(); a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-XXXXX-X', 'auto');
+  ga('send', 'pageview');
+</script>
+
+--> <script type="text/javascript" src="./main.70a66962.js"></script></body>
+
+</html>
